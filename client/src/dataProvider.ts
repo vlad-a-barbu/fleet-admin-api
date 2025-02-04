@@ -23,26 +23,32 @@ import {
   UpdateResult,
 } from "react-admin";
 
+const baseUrl = "http://localhost:3000";
+
+function getListQueryString(params: GetListParams): string {
+  return new URLSearchParams({
+    pageNumber: (params.pagination?.page ?? 0).toString(),
+    pageSize: (params.pagination?.perPage ?? 10).toString(),
+    sortBy: params.sort?.field ?? "",
+    sortOrder: params.sort?.order ?? "",
+  }).toString();
+}
+
 const dataProvider: DataProvider = {
   getList: async function <RecordType extends RaRecord = any>(
     resource: string,
     params: GetListParams & QueryFunctionContext,
   ): Promise<GetListResult<RecordType>> {
-    if (resource === "roles") {
-      const pageNumber = params.pagination?.page ?? 0;
-      const pageSize = params.pagination?.perPage ?? 10;
-      const resp = await fetch(
-        `http://localhost:3000/roles?pageNumber=${pageNumber}&pageSize=${pageSize}`,
-      );
-      return resp.json();
-    }
-    throw new Error("Function not implemented.");
+    const query = getListQueryString(params);
+    const resp = await fetch(`${baseUrl}/${resource}?${query}`);
+    return resp.json();
   },
-  getOne: function <RecordType extends RaRecord = any>(
+  getOne: async function <RecordType extends RaRecord = any>(
     resource: string,
     params: GetOneParams<RecordType> & QueryFunctionContext,
   ): Promise<GetOneResult<RecordType>> {
-    throw new Error("Function not implemented.");
+    const resp = await fetch(`${baseUrl}/${resource}/${params.id}`);
+    return resp.json();
   },
   getMany: function <RecordType extends RaRecord = any>(
     resource: string,
