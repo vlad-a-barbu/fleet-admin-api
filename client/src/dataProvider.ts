@@ -23,7 +23,7 @@ import {
   UpdateResult,
 } from "react-admin";
 
-const baseUrl = "http://localhost:3000";
+const baseUrl = "http://localhost:3000"; // todo
 
 function getListQueryString(params: GetListParams): string {
   return new URLSearchParams({
@@ -50,6 +50,57 @@ const dataProvider: DataProvider = {
     const resp = await fetch(`${baseUrl}/${resource}/${params.id}`);
     return resp.json();
   },
+  create: async function <
+    RecordType extends Omit<RaRecord, "id"> = any,
+    ResultRecordType extends RaRecord = RecordType & { id: Identifier },
+  >(
+    resource: string,
+    params: CreateParams,
+  ): Promise<CreateResult<ResultRecordType>> {
+    const resp = await fetch(`${baseUrl}/${resource}`, {
+      method: "POST",
+      body: JSON.stringify(params.data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return resp.json();
+  },
+  update: async function <RecordType extends RaRecord = any>(
+    resource: string,
+    params: UpdateParams,
+  ): Promise<UpdateResult<RecordType>> {
+    const resp = await fetch(`${baseUrl}/${resource}/${params.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(params.data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return resp.json();
+  },
+  delete: async function <RecordType extends RaRecord = any>(
+    resource: string,
+    params: DeleteParams<RecordType>,
+  ): Promise<DeleteResult<RecordType>> {
+    const resp = await fetch(`${baseUrl}/${resource}/${params.id}`, {
+      method: "DELETE",
+    });
+    return resp.json();
+  },
+  deleteMany: async function <RecordType extends RaRecord = any>(
+    resource: string,
+    params: DeleteManyParams<RecordType>,
+  ): Promise<DeleteManyResult<RecordType>> {
+    const resp = await fetch(`${baseUrl}/${resource}/deleteMany`, {
+      method: "POST",
+      body: JSON.stringify({ ids: params.ids }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return resp.json();
+  },
   getMany: function <RecordType extends RaRecord = any>(
     resource: string,
     params: GetManyParams<RecordType> & QueryFunctionContext,
@@ -62,37 +113,10 @@ const dataProvider: DataProvider = {
   ): Promise<GetManyReferenceResult<RecordType>> {
     throw new Error("Function not implemented.");
   },
-  update: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: UpdateParams,
-  ): Promise<UpdateResult<RecordType>> {
-    throw new Error("Function not implemented.");
-  },
   updateMany: function <RecordType extends RaRecord = any>(
     resource: string,
     params: UpdateManyParams,
   ): Promise<UpdateManyResult<RecordType>> {
-    throw new Error("Function not implemented.");
-  },
-  create: function <
-    RecordType extends Omit<RaRecord, "id"> = any,
-    ResultRecordType extends RaRecord = RecordType & { id: Identifier },
-  >(
-    resource: string,
-    params: CreateParams,
-  ): Promise<CreateResult<ResultRecordType>> {
-    throw new Error("Function not implemented.");
-  },
-  delete: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: DeleteParams<RecordType>,
-  ): Promise<DeleteResult<RecordType>> {
-    throw new Error("Function not implemented.");
-  },
-  deleteMany: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: DeleteManyParams<RecordType>,
-  ): Promise<DeleteManyResult<RecordType>> {
     throw new Error("Function not implemented.");
   },
 };

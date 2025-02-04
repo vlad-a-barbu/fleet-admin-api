@@ -62,4 +62,54 @@ app.get("roles/:id", (c) => {
   });
 });
 
+app.post("roles", async (c) => {
+  const { name, type } = await c.req.json();
+  const role = {
+    id: roles.length,
+    name,
+    type,
+  };
+  roles.push(role);
+  return c.json({
+    data: role,
+  });
+});
+
+app.patch("roles/:id", async (c) => {
+  const { id } = c.req.param();
+  const { name, type } = await c.req.json();
+  const role = roles.find((x) => x.id === +id);
+  if (role) {
+    if (name) {
+      role.name = name;
+    }
+    if (type) {
+      role.type = type;
+    }
+  }
+  return c.json({
+    data: role,
+  });
+});
+
+app.delete("roles/:id", (c) => {
+  const { id } = c.req.param();
+  const role = roles.find((x) => x.id === +id);
+  if (role) {
+    roles.splice(roles.indexOf(role), 1);
+  }
+  return c.json({
+    data: role,
+  });
+});
+
+app.post("roles/deleteMany", async (c) => {
+  const { ids }: { ids: number[] } = await c.req.json();
+  const deleteRoles = roles.filter((x) => !!ids.find((y) => y == x.id));
+  deleteRoles.forEach((x) => roles.splice(roles.indexOf(x), 1));
+  return c.json({
+    data: ids,
+  });
+});
+
 Deno.serve({ port: 3000 }, app.fetch);
