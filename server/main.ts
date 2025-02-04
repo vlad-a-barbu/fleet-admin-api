@@ -1,4 +1,6 @@
 import { Hono } from "hono";
+import { cors } from "hono/cors";
+
 const app = new Hono();
 
 interface Role {
@@ -12,6 +14,8 @@ const roles: Role[] = [...Array(100).keys()].map((id) => ({
   name: `Role ${id}`,
   type: id % 2 == 0 ? "mobile" : "admin",
 }));
+
+app.use("*", cors());
 
 app.get("roles", (c) => {
   const { pageNumber, pageSize } = c.req.query();
