@@ -19,9 +19,12 @@ app.use("*", cors());
 
 app.get("roles", (c) => {
   const { pageNumber, pageSize } = c.req.query();
-  const from = +pageNumber * +pageSize;
-  const batch = roles.slice(from, from + +pageSize);
-  return c.json(batch);
+  const from = (+pageNumber - 1) * +pageSize;
+  const data = roles.slice(from, from + +pageSize);
+  return c.json({
+    data,
+    total: roles.length,
+  });
 });
 
 Deno.serve({ port: 3000 }, app.fetch);
