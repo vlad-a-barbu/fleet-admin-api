@@ -7,10 +7,6 @@ export default function RolesList() {
         <TextField source="id" />
         <TextField source="name" />
         <TextField source="type" />
-
-
-
-
       </Datagrid>
     </List>
   );
