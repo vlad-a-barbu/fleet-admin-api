@@ -1,10 +1,12 @@
 import { Admin, Resource } from "react-admin";
-import { Layout } from "./Layout";
 import roles from "./roles";
 import dataProvider from "./dataProvider";
+import Layout from "./Layout";
 
-export const App = () => (
-  <Admin layout={Layout} dataProvider={dataProvider}>
-    <Resource name="roles" {...roles} />
-  </Admin>
-);
+export default function App() {
+  return (
+    <Admin layout={Layout} dataProvider={dataProvider}>
+      <Resource name="roles" {...roles} />
+    </Admin>
+  );
+}

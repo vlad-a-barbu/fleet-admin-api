@@ -1,6 +1,11 @@
 import { Hono } from "hono";
-import { Role } from "../shared/role.ts";
 import { paginatedQuery } from "./utils.ts";
+
+export interface Role {
+  id: number;
+  name: string;
+  type: string;
+}
 
 const roles: Role[] = [...Array(100).keys()].map((id) => ({
   id,

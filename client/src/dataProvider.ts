@@ -35,7 +35,7 @@ function getListQueryString(params: GetListParams): string {
 }
 
 const dataProvider: DataProvider = {
-  getList: async function <RecordType extends RaRecord = any>(
+  async getList<RecordType extends RaRecord>(
     resource: string,
     params: GetListParams & QueryFunctionContext,
   ): Promise<GetListResult<RecordType>> {
@@ -43,15 +43,15 @@ const dataProvider: DataProvider = {
     const resp = await fetch(`${baseUrl}/${resource}?${query}`);
     return resp.json();
   },
-  getOne: async function <RecordType extends RaRecord = any>(
+  async getOne<RecordType extends RaRecord>(
     resource: string,
     params: GetOneParams<RecordType> & QueryFunctionContext,
   ): Promise<GetOneResult<RecordType>> {
     const resp = await fetch(`${baseUrl}/${resource}/${params.id}`);
     return resp.json();
   },
-  create: async function <
-    RecordType extends Omit<RaRecord, "id"> = any,
+  async create<
+    RecordType extends Omit<RaRecord, "id">,
     ResultRecordType extends RaRecord = RecordType & { id: Identifier },
   >(
     resource: string,
@@ -66,7 +66,7 @@ const dataProvider: DataProvider = {
     });
     return resp.json();
   },
-  update: async function <RecordType extends RaRecord = any>(
+  async update<RecordType extends RaRecord>(
     resource: string,
     params: UpdateParams,
   ): Promise<UpdateResult<RecordType>> {
@@ -79,7 +79,7 @@ const dataProvider: DataProvider = {
     });
     return resp.json();
   },
-  delete: async function <RecordType extends RaRecord = any>(
+  async delete<RecordType extends RaRecord>(
     resource: string,
     params: DeleteParams<RecordType>,
   ): Promise<DeleteResult<RecordType>> {
@@ -88,7 +88,7 @@ const dataProvider: DataProvider = {
     });
     return resp.json();
   },
-  deleteMany: async function <RecordType extends RaRecord = any>(
+  async deleteMany<RecordType extends RaRecord>(
     resource: string,
     params: DeleteManyParams<RecordType>,
   ): Promise<DeleteManyResult<RecordType>> {
@@ -101,21 +101,27 @@ const dataProvider: DataProvider = {
     });
     return resp.json();
   },
-  getMany: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: GetManyParams<RecordType> & QueryFunctionContext,
+  getMany<RecordType extends RaRecord>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _resource: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _params: GetManyParams<RecordType> & QueryFunctionContext,
   ): Promise<GetManyResult<RecordType>> {
     throw new Error("Function not implemented.");
   },
-  getManyReference: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: GetManyReferenceParams & QueryFunctionContext,
+  getManyReference<RecordType extends RaRecord>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _resource: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _params: GetManyReferenceParams & QueryFunctionContext,
   ): Promise<GetManyReferenceResult<RecordType>> {
     throw new Error("Function not implemented.");
   },
-  updateMany: function <RecordType extends RaRecord = any>(
-    resource: string,
-    params: UpdateManyParams,
+  updateMany<RecordType extends RaRecord>(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _resource: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _params: UpdateManyParams,
   ): Promise<UpdateManyResult<RecordType>> {
     throw new Error("Function not implemented.");
   },
